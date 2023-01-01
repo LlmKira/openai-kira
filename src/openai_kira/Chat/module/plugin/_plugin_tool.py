@@ -7,7 +7,7 @@
 from loguru import logger
 from transformers import GPT2TokenizerFast
 
-from ... import openai_kira
+from ....setting import webServerStopSentence, webServerUrlFilter
 from ....utils import Network
 from ....utils.Talk import Talk
 
@@ -47,11 +47,11 @@ class PromptTool(object):
 class NlP(object):
     @staticmethod
     def get_webServerStopSentence():
-        return openai_kira.webServerStopSentence
+        return webServerStopSentence
 
     @staticmethod
     def get_is_filter_url():
-        return openai_kira.webServerUrlFilter
+        return webServerUrlFilter
 
     @staticmethod
     def summary(text: str, ratio: float = 0.5) -> str:

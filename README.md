@@ -10,18 +10,20 @@ Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（�
 **init**
 
 ```python
-redis = RedisConfig()
-filedb = "openai_msg.db"
-api_key = None
-proxy_url = ""
-webServerUrlFilter = False
-webServerStopSentence = ["小编", "一起来看一下"]
+import openai_kira
+openai_kira.setting.redisSetting = RedisConfig()
+openai_kira.setting.dbFile = "openai_msg.db"
+openai_kira.setting.openaiApiKey = None
+openai_kira.setting.proxyUrl = ""
+openai_kira.setting.webServerUrlFilter = False
+openai_kira.setting.webServerStopSentence = ["广告", "营销号"]
 ```
 
 ## 实例
 
 ```python
 from openai_kira import Chat
+
 receiver = Chat.Chatbot(
     conversation_id=10086,
     call_func=None,  # Api_keys.pop_api_key,
@@ -35,6 +37,7 @@ response = await receiver.get_chat_response(model="text-davinci-003",
                                             web_enhance_server={"time": ""}
                                             )
 ```
+
 ```python
 import openai_kira
 
@@ -46,6 +49,7 @@ response = await openai_kira.Completion(call_func=None).create(
     max_tokens=500
 )
 ```
+
 ## 结构
 
 ```markdown

@@ -10,10 +10,9 @@ import random
 
 import numpy
 
-from ... import openai_kira
-
 # 基于 Completion 上层
 from ..resouce import Completion
+from ..setting import openaiApiKey
 # Tool
 from ..utils.Talk import Talk
 from ..utils.data import MsgFlow
@@ -38,7 +37,7 @@ class Chatbot(object):
         :param call_func: 回调
         """
         if api_key is None:
-            api_key = openai_kira.api_key
+            api_key = openaiApiKey
         if isinstance(api_key, list):
             api_key: list
             if not api_key:

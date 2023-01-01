@@ -6,11 +6,10 @@
 import ast
 import json
 from typing import Union
-
+from ..setting import redisSetting, dbFile
 from pydantic import BaseModel
 
-from ... import openai_kira
-
+_redis_config = redisSetting
 # 这里是数据基本类
 
 redis_installed = True
@@ -183,9 +182,8 @@ class MsgFlow(object):
         :param uid: 独立 id ，是一个消息桶
         """
         self.uid = str(uid)
-        _redis_config = openai_kira.redis
         # 工具数据类型
-        self.MsgFlowData = GetDataManger(_redis_config, openai_kira.filedb)
+        self.MsgFlowData = GetDataManger(_redis_config, dbFile)
         self.memory: int = 100
 
     @staticmethod
