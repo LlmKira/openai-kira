@@ -5,6 +5,8 @@ Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（�
 
 ## 使用
 
+`pip install openai-kira`
+
 **init**
 
 ```python
