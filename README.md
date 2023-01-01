@@ -11,7 +11,8 @@ Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（�
 
 ```python
 import openai_kira
-openai_kira.setting.redisSetting = RedisConfig()
+
+openai_kira.setting.redisSetting = openai_kira.setting.RedisConfig()
 openai_kira.setting.dbFile = "openai_msg.db"
 openai_kira.setting.openaiApiKey = None
 openai_kira.setting.proxyUrl = ""

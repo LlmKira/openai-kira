@@ -9,3 +9,4 @@ from .utils import setting
 
 # from .setting import RedisConfig
 # from .setting import openaiApiKey, redisSetting, dbFile, proxyUrl, webServerUrlFilter, webServerStopSentence
+from .utils.setting import RedisConfig
