@@ -3,5 +3,6 @@
 # @FileName: __init__.py
 # @Software: PyCharm
 # @Github    ：sudoskys
+from .setting import *
 from .resouce import Completion
 from .Chat import Chatbot
