@@ -3,6 +3,8 @@
 # @FileName: __init__.py
 # @Software: PyCharm
 # @Github    ：sudoskys
-from .setting import *
-from .resouce import Completion
 from .Chat import Chatbot
+from .resouce import Completion
+
+from .setting import RedisConfig
+from .setting import openaiApiKey, redisSetting, dbFile, proxyUrl, webServerUrlFilter, webServerStopSentence
