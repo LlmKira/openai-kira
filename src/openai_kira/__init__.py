@@ -8,3 +8,11 @@ from .resouce import Completion
 
 from .setting import RedisConfig
 from .setting import openaiApiKey, redisSetting, dbFile, proxyUrl, webServerUrlFilter, webServerStopSentence
+
+RedisConfig = RedisConfig
+openaiApiKey = openaiApiKey
+redisSetting = redisSetting
+dbFile = dbFile
+proxyUrl = proxyUrl
+webServerUrlFilter = webServerUrlFilter
+webServerStopSentence = webServerStopSentence
