@@ -10,7 +10,7 @@ import random
 
 import numpy
 
-import openai_kira
+from ... import openai_kira
 
 # 基于 Completion 上层
 from ..resouce import Completion

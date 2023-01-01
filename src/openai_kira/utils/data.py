@@ -9,7 +9,7 @@ from typing import Union
 
 from pydantic import BaseModel
 
-import openai_kira
+from ... import openai_kira
 
 # 这里是数据基本类
 

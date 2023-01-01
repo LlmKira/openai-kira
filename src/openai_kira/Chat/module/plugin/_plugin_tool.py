@@ -7,9 +7,9 @@
 from loguru import logger
 from transformers import GPT2TokenizerFast
 
-import openai_kira
-from openai_kira.utils import Network
-from openai_kira.utils.Talk import Talk
+from ... import openai_kira
+from ....utils import Network
+from ....utils.Talk import Talk
 
 gpt_tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 

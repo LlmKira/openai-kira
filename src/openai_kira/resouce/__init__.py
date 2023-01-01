@@ -4,4 +4,4 @@
 # @Software: PyCharm
 # @Github    ：sudoskys
 
-from openai_kira.resouce.completion import Completion
+from .completion import Completion

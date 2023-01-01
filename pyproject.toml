@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openai-kira"
-version = "0.0.2"
+version = "0.0.3"
 description = "A chat client"
 authors = ["sudoskys <coldlando@hotmail.com>"]
 maintainers = [
@@ -9,7 +9,7 @@ maintainers = [
 repository = "https://github.com/sudoskys/openai-kira"
 license = "GPL-2.0-or-later"
 readme = "README.md"
-packages = [{include = "openai_kira",from="src"}]
+packages = [{ include = "openai_kira", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.7"

@@ -5,7 +5,7 @@
 # @Github    ：sudoskys
 import random
 from typing import Union
-import openai_kira
+from ... import openai_kira
 from ..api.api_utils import load_api
 from ..api.network import request
 
