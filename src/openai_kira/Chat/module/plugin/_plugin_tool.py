@@ -7,7 +7,7 @@
 from loguru import logger
 from transformers import GPT2TokenizerFast
 
-from ....setting import webServerStopSentence, webServerUrlFilter
+from ....utils import setting
 from ....utils import Network
 from ....utils.Talk import Talk
 
@@ -47,11 +47,11 @@ class PromptTool(object):
 class NlP(object):
     @staticmethod
     def get_webServerStopSentence():
-        return webServerStopSentence
+        return setting.webServerStopSentence
 
     @staticmethod
     def get_is_filter_url():
-        return webServerUrlFilter
+        return setting.webServerUrlFilter
 
     @staticmethod
     def summary(text: str, ratio: float = 0.5) -> str:

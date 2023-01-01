@@ -12,7 +12,7 @@ import numpy
 
 # 基于 Completion 上层
 from ..resouce import Completion
-from ..setting import openaiApiKey
+from ..utils import setting
 # Tool
 from ..utils.Talk import Talk
 from ..utils.data import MsgFlow
@@ -37,7 +37,7 @@ class Chatbot(object):
         :param call_func: 回调
         """
         if api_key is None:
-            api_key = openaiApiKey
+            api_key = setting.openaiApiKey
         if isinstance(api_key, list):
             api_key: list
             if not api_key:

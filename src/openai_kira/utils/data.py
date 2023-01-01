@@ -6,10 +6,11 @@
 import ast
 import json
 from typing import Union
-from ..setting import redisSetting, dbFile
+from ..utils import setting
 from pydantic import BaseModel
 
-_redis_config = redisSetting
+_redis_config = setting.redisSetting
+_db_file = setting.dbFile
 # 这里是数据基本类
 
 redis_installed = True
@@ -183,7 +184,7 @@ class MsgFlow(object):
         """
         self.uid = str(uid)
         # 工具数据类型
-        self.MsgFlowData = GetDataManger(_redis_config, dbFile)
+        self.MsgFlowData = GetDataManger(_redis_config, _db_file)
         self.memory: int = 100
 
     @staticmethod
