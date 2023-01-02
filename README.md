@@ -3,7 +3,7 @@
 Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（公开后就接入chatGPT），打包成依赖的玩具。提供 redis 和 文件数据库
 两个选择，非常好工作。
 
-## 使用
+## Use
 
 `pip install -U openai-kira`
 
@@ -11,74 +11,104 @@ Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（�
 
 ```python
 import openai_kira
+
 # 
 openai_kira.setting.redisSetting = openai_kira.setting.RedisConfig()
 openai_kira.setting.dbFile = "openai_msg.db"
-openai_kira.setting.openaiApiKey = ["key","key2"]
-openai_kira.setting.proxyUrl =None # "127.0.0.1"
+openai_kira.setting.openaiApiKey = ["key", "key2"]
+openai_kira.setting.proxyUrl = None  # "127.0.0.1"
 # 插件的设置
 openai_kira.setting.webServerUrlFilter = False
 openai_kira.setting.webServerStopSentence = ["广告", "营销号"]
 ```
 
-## 实例
+## Exp
 
 ```python
+import asyncio
+
+import openai_kira
 from openai_kira import Chat
 
+print(openai_kira.RedisConfig())
+openai_kira.setting.openaiApiKey = ["key"]
+
 receiver = Chat.Chatbot(
-    conversation_id="10086",
+    conversation_id=10086,
     call_func=None,  # Api_keys.pop_api_key,
-    start_sequ=None,
-    restart_sequ=None,
+    start_sequ="Ai:",
+    restart_sequ="Human:",
 )
-response = await receiver.get_chat_response(model="text-davinci-003",
-                                            prompt="你好",
-                                            max_tokens=500,
-                                            role="你扮演...",
-                                            web_enhance_server={"time": ""}
-                                            )
+
+
+async def main():
+    response = await receiver.get_chat_response(model="text-davinci-003",
+                                                prompt="你好",
+                                                max_tokens=500,
+                                                role="你扮演...",
+                                                web_enhance_server={"time": ""}
+                                                )
+    print(response)
+
+
+asyncio.run(main())
 ```
 
 ```python
+import asyncio
 import openai_kira
 
-response = await openai_kira.Completion(call_func=None).create(
-    model="text-davinci-003",
-    prompt=str("你好"),
-    temperature=0.2,
-    frequency_penalty=1,
-    max_tokens=500
-)
+print(openai_kira.RedisConfig())
+openai_kira.setting.openaiApiKey = ["key"]
+print(openai_kira.setting.openaiApiKey)
+
+
+async def main():
+    try:
+        response = await openai_kira.Completion().create(model="text-davinci-003",
+                                                         prompt="Say this is a test",
+                                                         temperature=0,
+                                                         max_tokens=20)
+        # TEST
+        print(response)
+        print(type(response))
+    except Exception as e:
+        print(e)
+        if "Incorrect API key provided" in e:
+            print("OK")
+        else:
+            print("NO")
+
+
+asyncio.run(main())
 ```
 
-## 插件
+## Plugin
 
-**目前的插件**
+**Table**
 
-| plugins   | desc      | value/server                                          | use                                   |
-|-----------|-----------|-------------------------------------------------------|---------------------------------------|
-| `time`    | now time  | `""`,no need                                          | `明昨今天`....                            |
-| `week`    | week time | `""`,no need                                          | `周几` .....                            |
-| `search`  | 搜索引擎支持    | `["some.com?searchword={}"]`,must need                | `查询` `你知道` len<80 / end with`?`len<15 |
-| `duckgo`  | 搜索引擎支持    | `""`,no need,but need `pip install duckduckgo_search` | `查询` `你知道` len<80 / end with`?`len<15 |
-| `details` | 分步回答问题    | `""`,no need                                          | Ask for help `how to`                 |
+| plugins   | desc              | value/server                                          | use                                   |
+|-----------|-------------------|-------------------------------------------------------|---------------------------------------|
+| `time`    | now time          | `""`,no need                                          | `明昨今天`....                            |
+| `week`    | week time         | `""`,no need                                          | `周几` .....                            |
+| `search`  | Web Search        | `["some.com?searchword={}"]`,must need                | `查询` `你知道` len<80 / end with`?`len<15 |
+| `duckgo`  | Web Search        | `""`,no need,but need `pip install duckduckgo_search` | `查询` `你知道` len<80 / end with`?`len<15 |
+| `details` | answer with steps | `""`,no need                                          | Ask for help `how to`                 |
 
-## 插件开发
+## Plugin dev
 
-`openai_kira/Chat/module/plugin` 的插件提供外部链接支持。
-
-在记忆池和分析 之间有一个 中间件，可以提供一定的联网检索支持和操作支持。可以对接其他 Api 的服务进行加料。
+There is a middleware between the memory pool and the analytics that provides some networked retrieval support and
+operational support. It can be spiked with services that interface to other Api's.
 
 **Prompt Injection**
 
-使用 `“”` `[]` 来强调内容，获得可能的支持。
+Use `""` `[]` to emphasise content.
 
-### 开发技巧
+### Exp
 
-首先在 `openai_kira/Chat/module/plugin` 创建一个文件，文件名不要带下划线（`_`）。
+First create a file in `openai_kira/Chat/module/plugin` without underscores (`_`) in the file name.
 
-**模板**
+**Template**
 
 ```python
 from ..platform import ChatPlugin, PluginConfig
@@ -89,29 +119,24 @@ from loguru import logger
 modulename = os.path.basename(__file__).strip(".py")
 
 
-# 注册插件
 @ChatPlugin.plugin_register(modulename)
 class Week(object):
     def __init__(self):
-        """属性"""
         self._server = None
         self._text = None
-        self._week_list = ["星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"]
-        self._week_key = ["星期", "星期几", "时间", "周几", "周一", "周二", "周三", "周四", "周五", "周六"]
+        self._time = ["time", "多少天", "几天", "时间", "几点", "今天", "昨天", "明天", "几月", "几月", "几号",
+                      "几个月",
+                      "天前"]
 
     def requirements(self):
         return []
 
     async def check(self, params: PluginConfig) -> bool:
-        """
-        条件方法
-        """
-        if PromptTool.isStrIn(prompt=params.text, keywords=self._week_list + self._week_key):
+        if PromptTool.isStrIn(prompt=params.text, keywords=self._time):
             return True
         return False
 
     async def process(self, params: PluginConfig) -> list:
-        """处理数据，返回列表，请自行进行错误处理！"""
         _return = []
         self._text = params.text
         # 校验
@@ -121,21 +146,22 @@ class Week(object):
         from datetime import datetime, timedelta, timezone
         utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
         bj_dt = utc_dt.astimezone(timezone(timedelta(hours=8)))
-        onw = bj_dt.weekday()
-        _return.append(f"Now {self._week_list[onw]}")
+        now = bj_dt.strftime("%Y-%m-%d %H:%M")
+        _return.append(f"Current Time UTC8 {now}")
         # LOGGER
         logger.trace(_return)
         return _return
 ```
 
-`openai_kira/Chat/module/plugin/_plugin_tool.py` 提供了一些工具类，欢迎 PR
+`openai_kira/Chat/module/plugin/_plugin_tool.py` provides some tool classes, PR is welcome
 
-**测试**
+**Testing**
 
-你无法在模块包内直接测试，请运行 `openai_kira/Chat/test_module.py` 文件测试模块，prompt 要符合 check。
+You cannot test directly from within the module package, please run the `openai_kira/Chat/test_module.py` file to test
+the module, with the prompt matching check.
 
-另外，你可以在模块中放心使用 `from loguru import logger` + `logger.trace(_return)` 来调试查看模块变量，trace
-等级的日志不会被生产环境输出。
+Alternatively, you can safely use `from loguru import logger` + `logger.trace(_return)` in the module to debug the
+module variables and the trace level logs will not be output by the production environment.
 
 ## 结构
 
