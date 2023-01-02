@@ -190,3 +190,18 @@ module variables and the trace level logs will not be output by the production e
 └── Talk.py
 ```
 
+## EULA(end-user-license-agreement)
+
+**cn**
+
+1. 自行因为不当操作导致的损失。
+2. 本项目并非官方项目。
+3. 因为安全事故导致的损失别找我。
+4. 如果你愿意，可以赞助我。
+
+**en**
+
+1. the damage caused by improper operation on its own.
+2. This is not an official project.
+3. Do not contact me for damage caused by safety incidents.
+4. you can sponsor me if you wish.
