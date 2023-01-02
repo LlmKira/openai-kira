@@ -26,9 +26,9 @@ async def main():
     except Exception as e:
         print(e)
         if "Incorrect API key provided" in e:
-            print("OK")
+            print("OK", e)
         else:
-            print("NO")
+            print("NO", e)
 
 
 asyncio.run(main())
