@@ -190,4 +190,3 @@ module variables and the trace level logs will not be output by the production e
 └── Talk.py
 ```
 
-商用目的按照 AGPL 协议授权。
