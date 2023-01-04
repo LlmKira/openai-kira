@@ -198,6 +198,7 @@ module variables and the trace level logs will not be output by the production e
 2. 本项目并非官方项目。
 3. 因为安全事故导致的损失我不负责。
 4. 如果你愿意，可以赞助我。
+5. 拒绝未经授权的专利/软著相关用途。
 
 **en**
 
