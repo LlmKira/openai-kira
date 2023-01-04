@@ -197,7 +197,8 @@ class MsgFlow(object):
     def _set_uid(self, uid, message_streams):
         return self.MsgFlowData.setKey(uid, message_streams)
 
-    def get_content(self, meo, sign: bool = False) -> tuple:
+    @staticmethod
+    def get_content(meo, sign: bool = False) -> tuple:
         """
         得到单条消息的内容
         :param sign: 是否署名

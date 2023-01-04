@@ -128,3 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /.idea/openai-kira.iml
+/test/setting.py
