@@ -8,7 +8,6 @@
 """
 
 import numpy
-
 from ..utils.Talk import Talk
 from ..utils.data import MsgFlow
 
@@ -53,7 +52,7 @@ class MatrixPoint(object):
                  token_limit: int = 2000,
                  ):
         """
-                以单条消息为对象处理达标并排序时间轴
+                群组多点聊天，适用于 Group 的记忆对象
                 数据清洗采用权重设定，而不操作元素删减
                 :param token_limit: 提示词限制
                 :param start_token: 中间件传过来的 token,作为限制的初始值
@@ -169,7 +168,7 @@ class SinglePoint(object):
                  token_limit: int = 2000,
                  ):
         """
-                以单条消息为对象处理达标并排序时间轴
+                单点聊天，更准确
                 数据清洗采用权重设定，而不操作元素删减
                 :param token_limit: 提示词限制
                 :param start_token: 中间件传过来的 token,作为限制的初始值
