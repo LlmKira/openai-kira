@@ -27,16 +27,18 @@ def random_string(length):
     return result
 
 
-def convert_msgflow_to_list(msg_list: list
+def convert_msgflow_to_list(msg_list: list,
+                            sign: bool = True
                             ) -> list:
     """
     提取以单条 msgflow 组成的列表的回复。
-    :param msg_list:
+    :param msg_list:消息列表
+    :param sign: 是否签名
     :return:
     """
     _result = []
     for ir in msg_list:
-        ask, reply = MsgFlow.get_content(ir, sign=True)
+        ask, reply = MsgFlow.get_content(ir, sign=sign)
         _result.append(ask)
         _result.append(reply)
     return _result

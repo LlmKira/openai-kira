@@ -7,7 +7,7 @@
 import json
 import os
 import random
-from .Optimizer import SinglePoint
+from .Optimizer import SinglePoint, convert_msgflow_to_list
 # 基于 Completion 上层
 from ..resouce import Completion
 from ..utils import setting
@@ -70,6 +70,17 @@ class Chatbot(object):
         # 存储成对的对话
         self._MsgFlow.saveMsg(msg=_msg)
         return _msg
+
+    def read_memory(self, plain_text: bool = False, sign: bool = False) -> list:
+        """
+        读取记忆桶
+        :param sign: 是否签名
+        :param plain_text: 是否转化为列表
+        """
+        _result = self._MsgFlow.read()
+        if plain_text:
+            _result = convert_msgflow_to_list(msg_list=_result, sign=sign)
+        return _result
 
     def record_dialogue(self, prompt, response):
         """
@@ -151,7 +162,7 @@ class Chatbot(object):
         _header = f"{_role}{head}"
         # 构建主体
         _prompt_s = [f"{self._restart_sequence}{prompt}."]
-        _prompt_memory = self._MsgFlow.read() + fake_memory
+        _prompt_memory = self.read_memory(plain_text=False) + fake_memory
         # 占位限制
         _extra_token = int(
             len(_prompt_memory) +
