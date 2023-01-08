@@ -103,6 +103,16 @@ class MatrixPoint(object):
                 memory[i]["content"]["weight"] = []
         memory = list(reversed(memory))
 
+        # 相似度检索
+        for i in range(0, len(memory)):
+            ask, reply = MsgFlow.get_content(memory[i], sign=False)
+            _diff1 = Talk.cosion_sismilarity(pre=prompt, aft=ask)
+            _diff = _diff1
+            score = _diff * 100
+            score = score if score < 95 else 1
+            if score != 0:
+                memory[i]["content"]["weight"].append(score)
+
         # 主题检索
         _key = Talk.tfidf_keywords(prompt, topK=5)
         # print(_key)
