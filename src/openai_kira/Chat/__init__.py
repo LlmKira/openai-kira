@@ -128,7 +128,6 @@ class Chatbot(object):
                                 character: list = None,
                                 head: str = None,
                                 role: str = "",
-                                fake_memory=None,
                                 optimizer: Optimizer = None,
                                 web_enhance_server: dict = None) -> dict:
         """
@@ -136,7 +135,6 @@ class Chatbot(object):
         :param web_enhance_server: {"type":["https://www.exp.com/search?q={}"]} 格式如此
         :param role:
         :param head: 预设技巧
-        :param fake_memory: 头脑风暴
         :param max_tokens: 限制返回字符数量
         :param model: 模型选择
         :param prompt: 提示词
@@ -147,8 +145,6 @@ class Chatbot(object):
         # 预设
         if optimizer is None:
             optimizer = Optimizer.MatrixPoint
-        if fake_memory is None:
-            fake_memory = []
         if character is None:
             character = ["educated", "clever", "friendly", "lovely", "talkative",
                          "omniscient", "awesome"]
@@ -162,7 +158,7 @@ class Chatbot(object):
         _header = f"{_role}{head}"
         # 构建主体
         _prompt_s = [f"{self._restart_sequence}{prompt}."]
-        _prompt_memory = self.read_memory(plain_text=False) + fake_memory
+        _prompt_memory = self.read_memory(plain_text=False)
         # 占位限制
         _extra_token = int(
             len(_prompt_memory) +
