@@ -86,7 +86,7 @@ class MatrixPoint(object):
             return convert_msgflow_to_list(memory)
 
         def forgetting_curve(x):
-            _weight = numpy.exp(-x / 5) * 100
+            _weight = numpy.exp(-x / 5) * 100 + 10
             # 低谷值
             _weight = _weight if _weight > 0 else 0
             # 高度线
@@ -97,7 +97,7 @@ class MatrixPoint(object):
         memory = list(reversed(memory))
         for i in range(0, len(memory)):
             _forget = forgetting_curve(i)
-            if _forget > 0:
+            if _forget > 10:
                 memory[i]["content"]["weight"] = [_forget]
             else:
                 memory[i]["content"]["weight"] = []
@@ -148,7 +148,7 @@ class MatrixPoint(object):
             score = sum(memory[i]["content"]["weight"])
             level = (score / full_score) * 100
             ask, reply = MsgFlow.get_content(memory[i], sign=True)
-            if level > 50:
+            if level > 30:
                 _now_token += Talk.tokenizer(f"{ask}{reply}")
                 if _now_token > _create_token:
                     break
@@ -215,7 +215,11 @@ class SinglePoint(object):
         # 计算初始保留比并初始化
         memory = list(reversed(memory))
         for i in range(0, len(memory)):
-            memory[i]["content"]["weight"] = [forgetting_curve(i)]
+            _forget = forgetting_curve(i)
+            if _forget > 10:
+                memory[i]["content"]["weight"] = [_forget]
+            else:
+                memory[i]["content"]["weight"] = []
         memory = list(reversed(memory))
 
         # 筛选标准发言
