@@ -106,7 +106,7 @@ class MatrixPoint(object):
         # 相似度检索
         for i in range(0, len(memory)):
             ask, reply = MsgFlow.get_content(memory[i], sign=False)
-            _diff1 = Talk.cosion_sismilarity(pre=prompt, aft=ask)
+            _diff1 = Talk.cosion_sismilarity(pre=prompt, aft=f"{ask}{reply}")
             _diff = _diff1
             score = _diff * 100
             score = score if score < 95 else 1
