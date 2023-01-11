@@ -52,11 +52,21 @@ async def chat():
     print(response)
 
 
-async def Moderations():
-    response = await openai_kira.Moderations().create(input="我讨厌外星人，要消灭外星人")
+async def Moderation():
+    response = await openai_kira.Moderations().create(input="Kill You！")
+    print(response)
+
+
+async def Sentiment():
+    response = openai_kira.utils.Talk.Talk.sentiment("我喜欢你！")
+    print(response)
+    response = openai_kira.utils.Talk.Talk.sentiment("我不喜欢你！")
+    print(response)
+    response = openai_kira.utils.Talk.Talk.sentiment("你是？")
     print(response)
 
 
 # asyncio.run(completion())
 # asyncio.run(chat())
-asyncio.run(Moderations())
+# asyncio.run(Moderation())
+asyncio.run(Sentiment())

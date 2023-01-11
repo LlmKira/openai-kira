@@ -6,6 +6,7 @@
 import re
 import time
 from ..Chat.text_analysis_tools.api.keywords.tfidf import TfidfKeywords
+from ..Chat.text_analysis_tools.api.sentiment.sentiment import SentimentAnalysis
 from ..Chat.text_analysis_tools.api.summarization.textrank_summarization import TextRankSummarization
 from ..Chat.text_analysis_tools.api.summarization.tfidf_summarization import TfidfSummarization
 from ..Chat.text_analysis_tools.api.text_similarity.simhash import SimHashSimilarity
@@ -16,6 +17,10 @@ gpt_tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 
 class Talk(object):
+    @staticmethod
+    def sentiment(sentence: str):
+        return SentimentAnalysis().analysis(sentence=sentence)
+
     @staticmethod
     def textrank_summarization(sentence: str, ratio=0.2):
         """
