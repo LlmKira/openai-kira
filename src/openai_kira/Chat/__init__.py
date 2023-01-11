@@ -146,8 +146,8 @@ class Chatbot(object):
         if optimizer is None:
             optimizer = Optimizer.MatrixPoint
         if character is None:
-            character = ["educated", "clever", "friendly", "lovely", "talkative",
-                         "omniscient", "awesome"]
+            character = ["educated", "俏皮", "青春感", "clever", "friendly", "lovely", "talkative",
+                         "omniscient", "幽默"]
         _character = ",".join(character)
         _role = f"With {self._start_sequence.strip(':')},她是{_character}的助手.\n"
         if role:

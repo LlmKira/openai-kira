@@ -43,9 +43,9 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="你好",
+                                                prompt="你好啊，今天怎么样？",
                                                 max_tokens=500,
-                                                role="你扮演...",
+                                                role="你扮演",
                                                 web_enhance_server={"time": ""},
                                                 optimizer=openai_kira.Chat.Optimizer.MatrixPoint
                                                 )
@@ -67,6 +67,6 @@ async def Sentiment():
 
 
 # asyncio.run(completion())
-# asyncio.run(chat())
+asyncio.run(chat())
 # asyncio.run(Moderation())
 asyncio.run(Sentiment())
