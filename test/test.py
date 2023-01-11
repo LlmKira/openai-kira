@@ -43,7 +43,7 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="你好啊，今天怎么样？",
+                                                prompt="我爱你啊",
                                                 max_tokens=500,
                                                 role="你扮演",
                                                 web_enhance_server={"time": ""},

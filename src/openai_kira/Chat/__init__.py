@@ -142,19 +142,33 @@ class Chatbot(object):
         :param character: 性格提示词，列表字符串
         :return:
         """
+        prompt = prompt.replace("帮我", "给我").replace("Help me", "Give me")
         # 预设
         if optimizer is None:
             optimizer = Optimizer.MatrixPoint
         if character is None:
-            character = ["educated", "俏皮", "青春感", "clever", "friendly", "lovely", "talkative",
-                         "omniscient", "幽默"]
+            character = [
+                "educated",
+                "俏皮",
+                "glamorous",
+                "helpful",
+                "girlish",
+                "clever",
+                "friendly",
+                "cute",
+                "talkative",
+                "omniscient",
+                "幽默",
+                "有趣的",
+                "温柔"
+            ]
         _character = ",".join(character)
-        _role = f"With {self._start_sequence.strip(':')},她是{_character}的助手.\n"
+        _role = f"Chat with {self._start_sequence.strip(':')}，who is {_character} 少女，很聪明，经常帮我.\n"
         if role:
             if 7 < len(f"{role}") < 500:
                 _role = f"With awesome clever {self._start_sequence}{role}.\n"
         if head is None:
-            head = f"{self._restart_sequence}让我们开始.\n"
+            head = f"{self._start_sequence.strip(':')} 正在和 {self._restart_sequence.strip(':')} 发消息.\n"
         _header = f"{_role}{head}"
         # 构建主体
         _prompt_s = [f"{self._restart_sequence}{prompt}."]
