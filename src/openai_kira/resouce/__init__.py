@@ -5,3 +5,4 @@
 # @Github    ：sudoskys
 
 from .completion import Completion
+from .moderations import Moderations

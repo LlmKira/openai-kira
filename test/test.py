@@ -52,5 +52,11 @@ async def chat():
     print(response)
 
 
+async def Moderations():
+    response = await openai_kira.Moderations().create(input="我讨厌外星人，要消灭外星人")
+    print(response)
+
+
 # asyncio.run(completion())
-asyncio.run(chat())
+# asyncio.run(chat())
+asyncio.run(Moderations())

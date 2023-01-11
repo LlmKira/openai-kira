@@ -1,5 +1,17 @@
 {
   "v1": {
+    "moderations": {
+      "desc": "moderations",
+      "url": "https://api.openai.com/v1/moderations",
+      "params": {
+        "input": {
+          "type": "string",
+          "intro": "text.",
+          "must": true,
+          "Defaults": "Sample text goes here"
+        }
+      }
+    },
     "completions": {
       "desc": "write",
       "url": "https://api.openai.com/v1/completions",

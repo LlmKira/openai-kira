@@ -24,6 +24,8 @@ openai_kira.setting.webServerStopSentence = ["广告", "营销号"]
 
 ## Exp
 
+SEE `./test` for More Exp!
+
 ```python
 import asyncio
 

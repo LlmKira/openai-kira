@@ -5,6 +5,7 @@
 # @Github    ：sudoskys
 from .Chat import Chatbot
 from .resouce import Completion
+from .resouce import Moderations
 from .utils import setting
 
 # from .setting import RedisConfig
