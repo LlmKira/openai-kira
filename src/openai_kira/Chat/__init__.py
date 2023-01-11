@@ -158,6 +158,7 @@ class Chatbot(object):
                 "cute",
                 "talkative",
                 "omniscient",
+                "非正式的",
                 "幽默",
                 "有趣的",
                 "温柔"
