@@ -23,6 +23,31 @@ class Search(object):
     def __init__(self):
         self._server = None
         self._text = None
+        self._help_keywords = ["怎么",
+                               "How",
+                               "什么",
+                               "作用",
+                               "知道",
+                               "啊？",
+                               "什么",
+                               "认识",
+                               "What",
+                               "what",
+                               "who",
+                               "how",
+                               "Who",
+                               "Why",
+                               "why",
+                               "Where",
+                               "了解",
+                               "简述一下",
+                               "How to",
+                               "how to",
+                               "解释",
+                               "请教",
+                               "介绍",
+                               "如何",
+                               ]
 
     def requirements(self):
         return ["httpx", "beautifulsoup4"]
@@ -128,7 +153,7 @@ class Search(object):
         if len(prompt) < 80:
             if (prompt.startswith("介绍") or prompt.startswith("查询") or prompt.startswith("你知道")
                 or "2022年" in prompt or "2023年" in prompt) \
-                    or (len(prompt) < 20 and "?" in prompt or "？" in prompt):
+                    or (4 < len(prompt) < 20 and PromptTool.isStrIn(prompt=prompt, keywords=self._help_keywords)):
                 return True
         return False
 

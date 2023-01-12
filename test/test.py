@@ -58,15 +58,23 @@ async def Moderation():
 
 
 async def Sentiment():
-    response = openai_kira.utils.Talk.Talk.sentiment("我喜欢你！")
-    print(response)
-    response = openai_kira.utils.Talk.Talk.sentiment("我不喜欢你！")
-    print(response)
-    response = openai_kira.utils.Talk.Talk.sentiment("你是？")
-    print(response)
+    _sentence_list = [
+        "你是？",
+        "我没那么多时间也懒得自己",
+        "什么是？",
+        "玉玉了，紫砂了",
+        "我知道了",
+        "主播抑郁了，自杀了",
+        "公主也能看啊",
+        "换谁都被吓走吧"
+    ]
+    for item in _sentence_list:
+        print(item)
+        response = openai_kira.utils.Talk.Talk.sentiment(item)
+        print(response)
 
 
 # asyncio.run(completion())
-asyncio.run(chat())
+# asyncio.run(chat())
 # asyncio.run(Moderation())
 asyncio.run(Sentiment())
