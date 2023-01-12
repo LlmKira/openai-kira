@@ -11,12 +11,18 @@ from ..Chat.text_analysis_tools.api.summarization.textrank_summarization import 
 from ..Chat.text_analysis_tools.api.summarization.tfidf_summarization import TfidfSummarization
 from ..Chat.text_analysis_tools.api.text_similarity.simhash import SimHashSimilarity
 from ..Chat.text_analysis_tools.api.text_similarity.cosion import CosionSimilarity
+from ..Chat.text_analysis_tools.api.keyphrase.keyphrase import KeyPhraseExtraction
 from transformers import GPT2TokenizerFast
 
 gpt_tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 
 class Talk(object):
+
+    @staticmethod
+    def keyPhraseExtraction(sentence: str):
+        return KeyPhraseExtraction().key_phrase_extraction(text=sentence)
+
     @staticmethod
     def sentiment(sentence: str):
         return SentimentAnalysis().analysis(sentence=sentence)

@@ -37,6 +37,7 @@ class Search(object):
                                "how",
                                "Who",
                                "Why",
+                               "的作品",
                                "why",
                                "Where",
                                "了解",
@@ -44,6 +45,11 @@ class Search(object):
                                "How to",
                                "how to",
                                "解释",
+                               "怎样的",
+                               "新闻",
+                               "电影",
+                               "2022",
+                               "2023",
                                "请教",
                                "介绍",
                                "如何",
@@ -151,9 +157,9 @@ class Search(object):
     async def check(self, params: PluginConfig) -> bool:
         prompt = params.text
         if len(prompt) < 80:
-            if (prompt.startswith("介绍") or prompt.startswith("查询") or prompt.startswith("你知道")
-                or "2022年" in prompt or "2023年" in prompt) \
-                    or (4 < len(prompt) < 20 and PromptTool.isStrIn(prompt=prompt, keywords=self._help_keywords)):
+            if (prompt.startswith(("介绍", "查询", "你知道", "你了解"))) \
+                    or (10 < len(prompt) < 30 and "?" in prompt or "？" in prompt) \
+                    or (7 < len(prompt) < 30 and PromptTool.isStrIn(prompt=prompt, keywords=self._help_keywords)):
                 return True
         return False
 

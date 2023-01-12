@@ -58,6 +58,10 @@ class NlP(object):
         return Talk.tfidf_summarization(sentence=text, ratio=ratio)
 
     @staticmethod
+    def keyPhrase(text: str,) -> str:
+        return Talk.keyPhraseExtraction(sentence=text)
+
+    @staticmethod
     def nlp_filter_list(prompt, material: list):
         if not material or not isinstance(material, list):
             return []

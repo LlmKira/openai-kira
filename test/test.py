@@ -74,7 +74,19 @@ async def Sentiment():
         print(response)
 
 
+async def KeyPharse():
+    _sentence_list = [
+        "《压缩毛巾》是部怎样的作品？",
+        "我没那么多时间也懒得自己",
+    ]
+    for item in _sentence_list:
+        print(item)
+        response = openai_kira.utils.Talk.Talk.keyPhraseExtraction(item)
+        print(response)
+
+
 # asyncio.run(completion())
 # asyncio.run(chat())
 # asyncio.run(Moderation())
-asyncio.run(Sentiment())
+# asyncio.run(Sentiment())
+asyncio.run(KeyPharse())
