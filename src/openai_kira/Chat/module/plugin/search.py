@@ -158,8 +158,8 @@ class Search(object):
         prompt = params.text
         if len(prompt) < 80:
             if (prompt.startswith(("介绍", "查询", "你知道", "你了解"))) \
-                    or (10 < len(prompt) < 30 and "?" in prompt or "？" in prompt) \
-                    or (7 < len(prompt) < 30 and PromptTool.isStrIn(prompt=prompt, keywords=self._help_keywords)):
+                    or (10 < len(prompt) < 22 and "?" in prompt or "？" in prompt) \
+                    or (6 < len(prompt) < 26 and PromptTool.isStrIn(prompt=prompt, keywords=self._help_keywords)):
                 return True
         return False
 

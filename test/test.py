@@ -43,7 +43,7 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="我爱你啊",
+                                                prompt="压缩毛巾是什么梗",
                                                 max_tokens=500,
                                                 role="你扮演",
                                                 web_enhance_server={"time": ""},
@@ -86,7 +86,7 @@ async def KeyPharse():
 
 
 # asyncio.run(completion())
-# asyncio.run(chat())
+asyncio.run(chat())
 # asyncio.run(Moderation())
 # asyncio.run(Sentiment())
 asyncio.run(KeyPharse())
