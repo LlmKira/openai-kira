@@ -28,7 +28,7 @@ class Search(object):
                                "什么",
                                "作用",
                                "知道",
-                               "啊？",
+                               "吗？",
                                "什么",
                                "认识",
                                "What",
@@ -52,6 +52,8 @@ class Search(object):
                                "2023",
                                "请教",
                                "介绍",
+                               "怎样",
+                               "若何", "奈何", "何如",
                                "如何",
                                ]
 
@@ -188,14 +190,14 @@ class Search(object):
         # GET
         _returner = []
         _list = await self.get_resource(self._text)
-        _list = _list[:10]
+        _list = _list[:20]
         _returner = NlP.nlp_filter_list(prompt=self._text, material=_list)
         logger.trace(_returner)
         info_cache[self._text] = _returner
         _pre = 0
         info = []
         for i in _returner:
-            if _pre > 220:
+            if _pre > 200:
                 break
             info.append(i)
             _pre += len(gpt_tokenizer.encode(i))

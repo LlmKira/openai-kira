@@ -164,7 +164,7 @@ class DuckGo(object):
         _sum = NlP.summary(text="。||".join(_returner), ratio=0.8)
         _returner = _sum.split("||")
         for i in _returner:
-            if _pre > 300:
+            if _pre > 233:
                 break
             info.append(i)
             _pre += len(gpt_tokenizer.encode(i))
