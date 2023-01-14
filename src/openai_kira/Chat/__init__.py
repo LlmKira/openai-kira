@@ -92,7 +92,8 @@ class Chatbot(object):
         if not REPLY:
             REPLY = [""]
         # 构建一轮对话场所
-        _msg = {"weight": [], "ask": f"{self._restart_sequence}:{prompt}", "reply": f"{self._start_sequence}:{REPLY[0]}"}
+        _msg = {"weight": [], "ask": f"{self._restart_sequence}:{prompt}",
+                "reply": f"{self._start_sequence}:{REPLY[0]}"}
         # 存储成对的对话
         self._MsgFlow.saveMsg(msg=_msg)
         return _msg
@@ -205,8 +206,8 @@ class Chatbot(object):
         _prompt = _header + _prompt
         # print(_prompt)
         api_config = {
-            "frequency_penalty": 0.1,
-            "presence_penalty": 0.6,
+            "frequency_penalty": 0.3,
+            "presence_penalty": 0.5,
             "temperature": 0.9,
             "logit_bias": {}
         }
