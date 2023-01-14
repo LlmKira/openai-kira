@@ -86,8 +86,20 @@ async def KeyPharse():
         print(response)
 
 
+async def GPT2():
+    _sentence_list = [
+        "《压缩毛巾》是部怎样的作品？",
+        "我没那么多时间也懒得自己",
+    ]
+    for item in _sentence_list:
+        print(item)
+        response = openai_kira.utils.Talk.Talk.get_gpt2_tokenizer().encode(item)
+        print(response)
+
+
 # asyncio.run(completion())
-asyncio.run(chat())
+# asyncio.run(chat())
 # asyncio.run(Moderation())
 # asyncio.run(Sentiment())
 # asyncio.run(KeyPharse())
+asyncio.run(GPT2())

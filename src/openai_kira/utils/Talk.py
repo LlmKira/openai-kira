@@ -86,6 +86,10 @@ class Talk(object):
         return tfidf.keywords(keywords)
 
     @staticmethod
+    def get_gpt2_tokenizer():
+        return gpt_tokenizer
+
+    @staticmethod
     def tokenizer(s: str) -> float:
         """
         谨慎的计算器，会预留 5 token
