@@ -129,7 +129,9 @@ class Chatbot(object):
                                 head: str = None,
                                 role: str = "",
                                 optimizer: Optimizer = None,
-                                web_enhance_server: dict = None) -> dict:
+                                web_enhance_server: dict = None,
+                                **kwargs
+                                ) -> dict:
         """
         异步的，得到对话上下文
         :param web_enhance_server: {"type":["https://www.exp.com/search?q={}"]} 格式如此
@@ -205,18 +207,24 @@ class Chatbot(object):
             _prompt = _prompt[1:]
         _prompt = _header + _prompt
         # print(_prompt)
+        api_config = {
+            "frequency_penalty": 0.1,
+            "presence_penalty": 0.7,
+            "temperature": 0.9,
+            "logit_bias": {}
+        }
+        config = {key: item for key, item in kwargs.items() if key in api_config.keys()}
+        api_config.update(config)
         # 响应
         response = await Completion(api_key=self.__api_key, call_func=self.__call_func).create(
             model=model,
             prompt=_prompt,
-            temperature=0.9,
             max_tokens=max_tokens,
             top_p=1,
             n=1,
-            frequency_penalty=0,
-            presence_penalty=0.5,
             user=str(self.get_conversation_hash()),
             stop=[f"{self._start_sequence}", f"{self._restart_sequence}"],
+            **api_config
         )
         self.record_dialogue(prompt=prompt, response=response)
         return response

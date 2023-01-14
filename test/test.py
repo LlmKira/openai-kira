@@ -4,6 +4,7 @@
 # @Software: PyCharm
 # @Github    ：sudoskys
 import asyncio
+import random
 
 # 最小单元测试
 import src.openai_kira as openai_kira
@@ -34,20 +35,20 @@ async def completion():
 
 
 receiver = openai_kira.Chat.Chatbot(
-    conversation_id=-10086,
+    conversation_id=random.randint(1, 10000000),
     call_func=None,  # Api_keys.pop_api_key,
-    start_sequ="Ai:",
-    restart_sequ="Human:",
+    start_sequ="Neko:",
+    restart_sequ="Me:",
 )
 
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="压缩毛巾是什么梗",
+                                                prompt="我爱你",
                                                 max_tokens=500,
                                                 role="你扮演",
                                                 web_enhance_server={"time": ""},
-                                                optimizer=openai_kira.Chat.Optimizer.MatrixPoint
+                                                optimizer=openai_kira.Chat.Optimizer.MatrixPoint,
                                                 )
     print(response)
 
@@ -89,4 +90,4 @@ async def KeyPharse():
 asyncio.run(chat())
 # asyncio.run(Moderation())
 # asyncio.run(Sentiment())
-asyncio.run(KeyPharse())
+# asyncio.run(KeyPharse())
