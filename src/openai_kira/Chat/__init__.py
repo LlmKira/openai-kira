@@ -206,7 +206,7 @@ class Chatbot(object):
         # print(_prompt)
         api_config = {
             "frequency_penalty": 0.1,
-            "presence_penalty": 0.7,
+            "presence_penalty": 0.6,
             "temperature": 0.9,
             "logit_bias": {}
         }
