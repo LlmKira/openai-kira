@@ -98,8 +98,8 @@ async def GPT2():
 
 
 # asyncio.run(completion())
-# asyncio.run(chat())
+asyncio.run(chat())
 # asyncio.run(Moderation())
 # asyncio.run(Sentiment())
 # asyncio.run(KeyPharse())
-asyncio.run(GPT2())
+# asyncio.run(GPT2())

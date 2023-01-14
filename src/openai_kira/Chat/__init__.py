@@ -50,11 +50,8 @@ class Chatbot(object):
         self._MsgFlow = MsgFlow(uid=self.conversation_id)
         self._start_sequence = start_sequ
         self._restart_sequence = restart_sequ
-        # 防止木头
-        if not self._start_sequence.strip().endswith(":"):
-            self._start_sequence = self._start_sequence + ":"
-        if not self._restart_sequence.strip().endswith(":"):
-            self._restart_sequence = self._restart_sequence + ":"
+        self._start_sequence = self._start_sequence.strip(":").strip("：")
+        self._restart_sequence = self._restart_sequence.strip(":").strip("：")
         self.__call_func = call_func
         self.__token_limit = token_limit
 
@@ -95,7 +92,7 @@ class Chatbot(object):
         if not REPLY:
             REPLY = [""]
         # 构建一轮对话场所
-        _msg = {"weight": [], "ask": f"{self._restart_sequence}{prompt}", "reply": f"{self._start_sequence}{REPLY[0]}"}
+        _msg = {"weight": [], "ask": f"{self._restart_sequence}:{prompt}", "reply": f"{self._start_sequence}:{REPLY[0]}"}
         # 存储成对的对话
         self._MsgFlow.saveMsg(msg=_msg)
         return _msg
@@ -166,15 +163,15 @@ class Chatbot(object):
                 "温柔"
             ]
         _character = ",".join(character)
-        _role = f"Chat with {self._start_sequence.strip(':')}，who is {_character} 少女，很聪明，经常帮我.\n"
+        _role = f"Chat with {self._start_sequence}，who is {_character} 少女，很聪明，经常帮我.\n"
         if role:
             if 7 < len(f"{role}") < 500:
-                _role = f"With awesome clever {self._start_sequence}{role}.\n"
+                _role = f"With awesome clever {self._start_sequence}:{role}.\n"
         if head is None:
-            head = f"{self._start_sequence.strip(':')} 正在和 {self._restart_sequence.strip(':')} 发消息.\n"
+            head = f"{self._start_sequence} 正在和 {self._restart_sequence} 发消息.\n"
         _header = f"{_role}{head}"
         # 构建主体
-        _prompt_s = [f"{self._restart_sequence}{prompt}."]
+        _prompt_s = [f"{self._restart_sequence}:{prompt}."]
         _prompt_memory = self.read_memory(plain_text=False)
         # 占位限制
         _extra_token = int(
@@ -199,7 +196,7 @@ class Chatbot(object):
         _prompt_list.extend(_prompt_apple)
         _prompt_list.extend(_prompt_s)
         # 拼接提示词汇
-        _prompt = '\n'.join(_prompt_list) + f"\n{self._start_sequence}"
+        _prompt = '\n'.join(_prompt_list) + f"\n{self._start_sequence}:"
         # 重切割
         _limit = self.__token_limit - max_tokens - Talk.tokenizer(_header)
         _mk = _limit if _limit > 0 else 0
@@ -223,7 +220,10 @@ class Chatbot(object):
             top_p=1,
             n=1,
             user=str(self.get_conversation_hash()),
-            stop=[f"{self._start_sequence}", f"{self._restart_sequence}"],
+            stop=[f"{self._start_sequence}:",
+                  f"{self._restart_sequence}:",
+                  f"{self._start_sequence}：",
+                  f"{self._restart_sequence}："],
             **api_config
         )
         self.record_dialogue(prompt=prompt, response=response)
