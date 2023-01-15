@@ -81,6 +81,8 @@ class Detect(object):
         return LangDetector().detect(sentence)[0][0].upper()
 
     def get_tendency_arg(self, prompt: str, memory: list = None, lang: str = "CN") -> tuple:
+        if memory is None:
+            memory = []
         # 代码
         if self.isCode(sentence=prompt):
             temperature = 0.9
@@ -105,10 +107,18 @@ class Detect(object):
         _sentiment_score = 0.1 if 0.05 < _sentiment_score < 0.1 else _sentiment_score
         _sentiment_score = -0.1 if -0.1 < _sentiment_score < -0.05 else _sentiment_score
 
-        # NEW
+        # NEW 高兴正数，就不扭转
         presence_penalty -= _sentiment_score * 1.2
-        # REPEAT
-        frequency_penalty -= _sentiment_score * 0.8
+
+        # REPEAT 高兴正数，则采用默认加法惩罚
+        frequency_penalty += _sentiment_score * 0.8
+        _memory_len = len(memory)
+        # 对话结束就拒绝复读，扭转为正数！
+        if _memory_len > 20:
+            while _memory_len > 20:
+                _memory_len = _memory_len - 20
+            if _memory_len / 20 > 0.7:
+                frequency_penalty = abs(frequency_penalty)
 
         # CHECK
         temperature = temperature if 0 < temperature <= 1 else 0.9

@@ -16,6 +16,8 @@ openai_kira.setting.openaiApiKey = setting.ApiKey
 
 print(openai_kira.setting.openaiApiKey)
 
+from openai_kira.utils.chat import Utils
+
 
 async def completion():
     try:
