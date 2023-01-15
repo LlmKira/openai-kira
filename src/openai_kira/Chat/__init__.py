@@ -192,6 +192,7 @@ class Chatbot(object):
                                 role: str = "",
                                 optimizer: Optimizer = None,
                                 web_enhance_server: dict = None,
+                                no_penalty: bool = False,
                                 **kwargs
                                 ) -> dict:
         """
@@ -204,6 +205,7 @@ class Chatbot(object):
         :param prompt: 提示词
         :param optimizer: 优化器
         :param character: 性格提示词，列表字符串
+        :param no_penalty: 不使用自动惩罚参数调整
         :return:
         """
         prompt = prompt.replace("帮我", "给我").replace("Help me", "Give me")
@@ -276,16 +278,22 @@ class Chatbot(object):
         while Utils.tokenizer(_prompt) > _mk:
             _prompt = _prompt[1:]
         _prompt = _header + _prompt
-        # THINK ABOUT HOT CAKE
-        _frequency_penalty, _presence_penalty, _temperature = Detect().get_tendency_arg(prompt=prompt)
-
-        # SOME HOT CAKE
         _request_arg = {
-            "frequency_penalty": _frequency_penalty,
-            "presence_penalty": _presence_penalty,
-            "temperature": _temperature,
+            "temperature": 0.9,
             "logit_bias": {}
         }
+        if not no_penalty:
+            # THINK ABOUT HOT CAKE
+            _frequency_penalty, _presence_penalty, _temperature = Detect().get_tendency_arg(prompt=prompt)
+            # SOME HOT CAKE
+            _request_arg.update({
+                "frequency_penalty": _frequency_penalty,
+                "presence_penalty": _presence_penalty,
+                "temperature": _temperature,
+                "logit_bias": {}
+            })
+
+        # KWARGS
         _arg_config = {key: item for key, item in kwargs.items() if key in _request_arg.keys()}
         _request_arg.update(_arg_config)
 
