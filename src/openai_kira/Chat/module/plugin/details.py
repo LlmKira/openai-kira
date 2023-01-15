@@ -18,29 +18,7 @@ class Details(object):
         self._server = None
         self._text = None
         # 绝望列表
-        self._keywords = ["怎么做",
-                          "How",
-                          "how",
-                          "如何做",
-                          "帮我",
-                          "帮助我",
-                          "请给我",
-                          "给出建议",
-                          "给建议",
-                          "给我建议",
-                          "给我一些",
-                          "请教",
-                          "建议",
-                          "步骤",
-                          "怎样",
-                          "如何",
-                          "怎么样",
-                          "为什么",
-                          "帮朋友",
-                          "怎么",
-                          "需要什么",
-                          "注意什么",
-                          "怎么办"]
+        self._keywords = PromptTool.help_words_list()
 
     async def check(self, params: PluginConfig) -> bool:
         if PromptTool.isStrIn(prompt=params.text, keywords=self._keywords):

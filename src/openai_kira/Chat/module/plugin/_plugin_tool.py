@@ -18,6 +18,35 @@ netTool = network
 
 class PromptTool(object):
     @staticmethod
+    def help_words_list():
+        return ["怎么做",
+                "How",
+                "how",
+                "如何做",
+                "帮我",
+                "帮助我",
+                "请给我",
+                "给出建议",
+                "给建议",
+                "给我建议",
+                "给我一些",
+                "请教",
+                "建议",
+                "步骤",
+                "怎样",
+                "如何",
+                "怎么样",
+                "为什么",
+                "帮朋友",
+                "怎么",
+                "需要什么",
+                "注意什么",
+                "怎么办"] + ['怎麼做', '如何做', '幫我', '幫助我', '請給我', '給出建議', '給建議', '給我建議',
+                             '給我一些', '請教', '建議', '步驟', '怎樣', '如何', '怎麼樣', '為什麼', '幫朋友',
+                             '怎麼', '需要什麼', '註意什麼', '怎麼辦'] + ['助け', '何を', 'なぜ', '教えて', '提案',
+                                                                          '何が', '何に']
+
+    @staticmethod
     def isStrIn(prompt: str, keywords: list):
         isIn = False
         for i in keywords:
@@ -58,7 +87,7 @@ class NlP(object):
         return Utils.tfidf_summarization(sentence=text, ratio=ratio)
 
     @staticmethod
-    def keyPhrase(text: str,) -> str:
+    def keyPhrase(text: str, ) -> str:
         return Utils.keyPhraseExtraction(sentence=text)
 
     @staticmethod
