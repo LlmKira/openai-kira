@@ -287,6 +287,8 @@ class Chatbot(object):
             "temperature": _temperature,
             "logit_bias": {}
         }
+        api_config = json.dumps(api_config)
+        api_config = json.loads(api_config)
         config = {key: item for key, item in kwargs.items() if key in api_config.keys()}
         api_config.update(config)
         # REQ

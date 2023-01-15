@@ -37,7 +37,7 @@ async def completion():
 
 
 receiver = openai_kira.Chat.Chatbot(
-    conversation_id=random.randint(1, 10000000),
+    conversation_id=10086,  # random.randint(1, 10000000),
     call_func=None,  # Api_keys.pop_api_key,
     start_sequ="Neko:",
     restart_sequ="Me:",
@@ -46,7 +46,7 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="帮我写：我真的很不喜欢你",
+                                                prompt="说一个关于丁真的故事",
                                                 max_tokens=500,
                                                 role="你扮演",
                                                 web_enhance_server={"time": ""},

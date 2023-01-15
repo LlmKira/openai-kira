@@ -53,7 +53,9 @@ class Search(object):
                                "请教",
                                "介绍",
                                "怎样",
-                               "若何", "奈何", "何如",
+                               "若何",
+                               "奈何",
+                               "何如",
                                "如何",
                                ]
 
@@ -197,7 +199,7 @@ class Search(object):
         _pre = 0
         info = []
         for i in _returner:
-            if _pre > 200:
+            if _pre > 180:
                 break
             info.append(i)
             _pre += len(gpt_tokenizer.encode(i))
