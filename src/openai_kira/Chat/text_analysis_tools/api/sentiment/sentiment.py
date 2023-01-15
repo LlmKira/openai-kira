@@ -17,7 +17,7 @@ jieba_dic_path = os.path.join(CURRENT_PATH, 'data', 'jieba.dic')
 jieba.load_userdict(jieba_dic_path)
 
 
-class SentimentAnalysis():
+class SentimentAnalysis(object):
     def __init__(self):
         self.sentiment_score_dic = self.load_json(sentiment_path)
         self.degree_score = self.load_json(degree_path)

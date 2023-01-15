@@ -12,9 +12,73 @@ from .Optimizer import SinglePoint, convert_msgflow_to_list
 from ..resouce import Completion
 from ..utils import setting
 # Tool
-from ..utils.Talk import Talk
+from ..utils.chat import Utils, Detect
 from ..utils.data import MsgFlow
 from loguru import logger
+
+
+class Preset(object):
+    @staticmethod
+    def add_tail(switch: bool = False, sentence: str = "", tail: str = ""):
+        if switch:
+            return f"{sentence}{tail}"
+        else:
+            return f"{sentence}"
+
+    def character(self, lang: str = "ZH"):
+        lang = lang.upper()
+        if lang == "ZH":
+            return ["受过教育的", "聪明的",
+                    "友好的", "可爱的",
+                    "幽默地", "有趣地", "温柔地"]
+        elif lang == "EN":
+            return [
+                "educated", "glamorous",
+                "helpful", "girlish",
+                "clever", "friendly",
+                "cute", "talkative",
+                "Humorously"
+            ]
+        elif lang == "JA":
+            return ["教育された", "魅力的な", "丁寧な", "女性らしい", "賢い", "親切な", "可愛い", "喋っているような", "ユーモラスに", "興味深い",
+                    "優しく"]
+        else:
+            return [
+                "educated", "glamorous",
+                "helpful", "girlish",
+                "clever", "friendly",
+                "cute", "talkative",
+                "Humorously", "Interesting",
+                "Tenderly"
+            ]
+
+    def role(self, name: str = "", character: str = "", prompt_iscode: bool = False, lang: str = "ZH"):
+        lang = lang.upper()
+        role = ""
+        if lang == "ZH":
+            role = f"{name} 是一个 {character} 的少女，聪明伶俐，经常帮我,"
+            role = self.add_tail(prompt_iscode, sentence=role, tail="是编程大师冠军,")
+        elif lang == "EN":
+            role = f"{name} is a {character} girl, always help me.\n"
+            role = self.add_tail(prompt_iscode, sentence=role, tail="a Master Programmer Champion,")
+        elif lang == "JA":
+            role = f"{name}は{character}の女の子です。 しばし手伝って。\n"
+            role = self.add_tail(prompt_iscode, sentence=role, tail="マスター プログラマー チャンピオンになる,")
+        return f"{role}.\n"
+
+    def head(self, start_name: str = "", restart_name: str = "", prompt_iscode: bool = False, lang: str = "ZH"):
+        lang = lang.upper()
+        head = ""
+        if lang == "ZH":
+            head = f"{start_name} 正在和 {restart_name} 聊天,"
+            head = self.add_tail(prompt_iscode, sentence=head, tail="提供编程指导,")
+        elif lang == "EN":
+            head = f"{start_name} is a {restart_name} girl, always help me,"
+            head = self.add_tail(prompt_iscode, sentence=head, tail="Provide programming guidance,")
+        elif lang == "JA":
+            head = f"{start_name}は{restart_name}の女の子です。 しばし手伝って,"
+            head = self.add_tail(prompt_iscode, sentence=head, tail="プログラミング指導を提供する,")
+        return f"{head}.\n"
 
 
 class Chatbot(object):
@@ -143,49 +207,54 @@ class Chatbot(object):
         :return:
         """
         prompt = prompt.replace("帮我", "给我").replace("Help me", "Give me")
-        # 预设
+
+        # OPTIMIZER
         if optimizer is None:
             optimizer = Optimizer.MatrixPoint
+
+        # LANG
+        prompt_lang = Detect.get_text_language(sentence=prompt)
+        prompt_iscode = Detect.isCode(sentence=prompt)
+        prompt_preset = Preset()
+
+        # ROLE
         if character is None:
-            character = [
-                "educated",
-                "俏皮",
-                "glamorous",
-                "helpful",
-                "girlish",
-                "clever",
-                "friendly",
-                "cute",
-                "talkative",
-                "omniscient",
-                "非正式的",
-                "幽默",
-                "有趣的",
-                "温柔"
-            ]
-        _character = ",".join(character)
-        _role = f"Chat with {self._start_sequence}，who is {_character} 少女，很聪明，经常帮我.\n"
+            character = prompt_preset.character(lang=prompt_lang)
+        _role = prompt_preset.role(name=self._start_sequence,
+                                   character=",".join(character),
+                                   prompt_iscode=prompt_iscode,
+                                   lang=prompt_lang)
         if role:
-            if 7 < len(f"{role}") < 500:
-                _role = f"With awesome clever {self._start_sequence}:{role}.\n"
+            if 7 < len(f"{role}") < 600:
+                _role = f"{self._start_sequence}:{role}.\n"
+
+        # HEAD
         if head is None:
-            head = f"{self._start_sequence} 正在和 {self._restart_sequence} 发消息.\n"
+            head = prompt_preset.head(start_name=self._start_sequence,
+                                      restart_name=self._restart_sequence,
+                                      prompt_iscode=prompt_iscode,
+                                      lang=prompt_lang)
         _header = f"{_role}{head}"
-        # 构建主体
+
+        # PROMPT
         _prompt_s = [f"{self._restart_sequence}:{prompt}."]
+
+        # MEMORY
         _prompt_memory = self.read_memory(plain_text=False)
-        # 占位限制
+
+        # EXTRA
         _extra_token = int(
             len(_prompt_memory) +
-            Talk.tokenizer(self._start_sequence) +
+            Utils.tokenizer(self._start_sequence) +
             max_tokens +
-            Talk.tokenizer(_header + _prompt_s[0]))
-        _prompt_list = []
-        # 中间件
-        _appendix = await self.Prehance(prompt=prompt, table=web_enhance_server)
-        start_token = int(Talk.tokenizer(_appendix))
-        _prompt_list.append(_appendix)
-        # 记忆池策略
+            Utils.tokenizer(_header + _prompt_s[0]))
+
+        # PLUGIN
+        _appendix = await self.Plugin(prompt=prompt, table=web_enhance_server)
+        start_token = int(Utils.tokenizer(_appendix))
+        _prompt_list = [_appendix]
+
+        # RUN optimizer
         _prompt_apple = optimizer(
             prompt=prompt,
             start_token=start_token,
@@ -193,27 +262,34 @@ class Chatbot(object):
             extra_token=_extra_token,
             token_limit=self.__token_limit,
         ).run()
-        #
+
+        # AFTER
         _prompt_list.extend(_prompt_apple)
         _prompt_list.extend(_prompt_s)
-        # 拼接提示词汇
+
+        # STICK
         _prompt = '\n'.join(_prompt_list) + f"\n{self._start_sequence}:"
-        # 重切割
-        _limit = self.__token_limit - max_tokens - Talk.tokenizer(_header)
+
+        # RESIZE
+        _limit = self.__token_limit - max_tokens - Utils.tokenizer(_header)
         _mk = _limit if _limit > 0 else 0
-        while Talk.tokenizer(_prompt) > _mk:
+        while Utils.tokenizer(_prompt) > _mk:
             _prompt = _prompt[1:]
         _prompt = _header + _prompt
-        # print(_prompt)
+
+        # THINK ABOUT HOT CAKE
+        _frequency_penalty, _presence_penalty, _temperature = Detect().get_tendency_arg(prompt=prompt)
+
+        # SOME HOT CAKE
         api_config = {
-            "frequency_penalty": 0.3,
-            "presence_penalty": 0.5,
-            "temperature": 0.9,
+            "frequency_penalty": _frequency_penalty,
+            "presence_penalty": _presence_penalty,
+            "temperature": _temperature,
             "logit_bias": {}
         }
         config = {key: item for key, item in kwargs.items() if key in api_config.keys()}
         api_config.update(config)
-        # 响应
+        # REQ
         response = await Completion(api_key=self.__api_key, call_func=self.__call_func).create(
             model=model,
             prompt=_prompt,
@@ -230,7 +306,7 @@ class Chatbot(object):
         self.record_dialogue(prompt=prompt, response=response)
         return response
 
-    async def Prehance(self, table: dict, prompt: str) -> str:
+    async def Plugin(self, table: dict, prompt: str) -> str:
         _append = "-"
         _return = []
         if not all([table, prompt]):
@@ -252,7 +328,6 @@ class Chatbot(object):
     @staticmethod
     def str_prompt(prompt: str) -> list:
         range_list = prompt.split("\n")
-
         # 如果当前项不包含 `:`，则将其并入前一项中
         result = [range_list[i] + range_list[i + 1] if ":" not in range_list[i] else range_list[i] for i in
                   range(len(range_list))]

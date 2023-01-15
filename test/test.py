@@ -44,7 +44,7 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="我爱你",
+                                                prompt="帮我写：我真的很不喜欢你",
                                                 max_tokens=500,
                                                 role="你扮演",
                                                 web_enhance_server={"time": ""},
@@ -71,7 +71,7 @@ async def Sentiment():
     ]
     for item in _sentence_list:
         print(item)
-        response = openai_kira.utils.Talk.Talk.sentiment(item)
+        response = openai_kira.utils.chat.Utils.sentiment(item)
         print(response)
 
 
@@ -82,7 +82,7 @@ async def KeyPharse():
     ]
     for item in _sentence_list:
         print(item)
-        response = openai_kira.utils.Talk.Talk.keyPhraseExtraction(item)
+        response = openai_kira.utils.chat.Utils.keyPhraseExtraction(item)
         print(response)
 
 
@@ -93,7 +93,7 @@ async def GPT2():
     ]
     for item in _sentence_list:
         print(item)
-        response = openai_kira.utils.Talk.Talk.get_gpt2_tokenizer().encode(item)
+        response = openai_kira.utils.chat.Utils.get_gpt2_tokenizer().encode(item)
         print(response)
 
 

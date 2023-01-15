@@ -88,6 +88,7 @@ class Zhihu(object):
         try:
             from playwright.async_api import async_playwright
         except Exception as e:
+            logger.error(e)
             logger.error("You Need Install:`pip install duckduckgo_search`")
             return []
         # GET

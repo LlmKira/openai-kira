@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Time    : 12/28/22 4:16 PM
-# @FileName: Network.py
+# @FileName: network.py
 # @Software: PyCharm
 # @Github    ：sudoskys
 

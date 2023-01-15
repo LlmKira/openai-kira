@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from ...api.keywords import STOPWORDS
 
 
-class CosionSimilarity():
+class CosionSimilarity(object):
     """
     根据余弦函数计算相似性
     one-hot编码

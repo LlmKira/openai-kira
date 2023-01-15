@@ -8,12 +8,12 @@ from loguru import logger
 from transformers import GPT2TokenizerFast
 
 from ....utils import setting
-from ....utils import Network
-from ....utils.Talk import Talk
+from ....utils import network
+from ....utils.chat import Utils
 
 gpt_tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
-netTool = Network
+netTool = network
 
 
 class PromptTool(object):
@@ -55,11 +55,11 @@ class NlP(object):
 
     @staticmethod
     def summary(text: str, ratio: float = 0.5) -> str:
-        return Talk.tfidf_summarization(sentence=text, ratio=ratio)
+        return Utils.tfidf_summarization(sentence=text, ratio=ratio)
 
     @staticmethod
     def keyPhrase(text: str,) -> str:
-        return Talk.keyPhraseExtraction(sentence=text)
+        return Utils.keyPhraseExtraction(sentence=text)
 
     @staticmethod
     def nlp_filter_list(prompt, material: list):
@@ -71,7 +71,7 @@ class NlP(object):
             prev_len = len(material)
             _pre = material[0]
             _afe = material[1]
-            sim = Talk.simhash_similarity(pre=_pre, aft=_afe)
+            sim = Utils.simhash_similarity(pre=_pre, aft=_afe)
             if sim < 12:
                 _remo = _afe if len(_afe) > len(_pre) else _pre
                 # 移除过于相似的
@@ -87,7 +87,7 @@ class NlP(object):
                     continue
                 _pre = material[i]
                 _afe = material[i + 1]
-                sim = Talk.cosion_sismilarity(pre=_pre, aft=_afe)
+                sim = Utils.cosion_sismilarity(pre=_pre, aft=_afe)
                 if sim > 0.7:
                     _remo = _afe if len(_afe) > len(_pre) else _pre
                     # 移除过于相似的
@@ -101,14 +101,14 @@ class NlP(object):
         material = list(material_.keys())
         _top_table = {}
         for item in material:
-            _top_table[item] = Talk.cosion_sismilarity(pre=prompt, aft=item)
+            _top_table[item] = Utils.cosion_sismilarity(pre=prompt, aft=item)
         material = {k: v for k, v in _top_table.items() if v > 0.15}
         # 搜索引擎比相似度算法靠谱所以注释掉了
         # material = OrderedDict(sorted(material.items(), key=lambda t: t[1]))
         # logger.trace(material)
 
         # 关联度指数计算
-        _key = Talk.tfidf_keywords(prompt, topK=7)
+        _key = Utils.tfidf_keywords(prompt, topK=7)
         _score = 0
         _del_keys = []
         for k, i in material.items():

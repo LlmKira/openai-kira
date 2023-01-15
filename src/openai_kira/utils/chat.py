@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Time    : 12/16/22 2:34 PM
-# @FileName: Talk.py
+# @FileName: Utils.py
 # @Software: PyCharm
 # @Github    ：sudoskys
+import random
 import re
-import time
+
+from .langdetect.langdetect import LangDetector
 from ..Chat.text_analysis_tools.api.keywords.tfidf import TfidfKeywords
 from ..Chat.text_analysis_tools.api.sentiment.sentiment import SentimentAnalysis
 from ..Chat.text_analysis_tools.api.summarization.textrank_summarization import TextRankSummarization
@@ -17,7 +19,113 @@ from transformers import GPT2TokenizerFast
 gpt_tokenizer = GPT2TokenizerFast.from_pretrained("gpt2")
 
 
-class Talk(object):
+class Detect(object):
+    @staticmethod
+    def isNeedHelp(sentence) -> bool:
+        _check = ["怎么做", "How", "how", "what", "What", "Why", "why", "复述", "复读",
+                  "要求你", "原样", "例子", "解释", "exp", "sdk", "api", "key", "推荐",
+                  "说出", "写出", "如何实现", "代码", "写", "give", "Give", "代码", "请把", "请给", "请写", "help",
+                  "help", "Help", "写一",
+                  "code", "如何做", "帮我", "帮助我", "帮我", "请给我", "什么", "为何",
+                  "给建议", "给我", "给我一些", "请教",
+                  "建议", "步骤", "怎样", "如何", "怎么样", "为什么",
+                  "帮朋友", "怎么", "需要什么", "注意什么", "怎么办",
+                  "助け", "何を", "なぜ", "教えて", "提案", "何が", "何に", "何をす"
+                  ]
+        for item in _check:
+            if item in sentence:
+                return True
+        return False
+
+    @staticmethod
+    def isCode(sentence) -> bool:
+        code = False
+        _reco = [
+            '("',
+            '")',
+            ").",
+            "()",
+            "!=",
+            "=="
+        ]
+        _t = len(_reco)
+        _r = 0
+        for i in _reco:
+            if i in sentence:
+                _r += 1
+        if _r > _t / 2:
+            code = True
+        rms = [
+            "print_r(",
+            "var_dump(",
+            'NSLog( @',
+            'println(',
+            '.log(',
+            'print(',
+            'printf(',
+            'WriteLine(',
+            '.Println(',
+            '.Write(',
+            'alert(',
+            'echo(',
+        ]
+        for i in rms:
+            if i in sentence:
+                code = True
+        return code
+
+    @staticmethod
+    def get_text_language(sentence: str, raw_list: bool = False):
+        if raw_list:
+            return LangDetector().detect(sentence)
+        return LangDetector().detect(sentence)[0][0].upper()
+
+    def get_tendency_arg(self, prompt: str, memory: list = None, lang: str = "CN") -> tuple:
+        # 代码
+        if self.isCode(sentence=prompt):
+            temperature = 0.9
+            frequency_penalty = 0
+            presence_penalty = 0
+            return frequency_penalty, presence_penalty, temperature
+        if self.isNeedHelp(sentence=prompt):
+            temperature = 0.9
+            frequency_penalty = 0
+            presence_penalty = 0
+            return frequency_penalty, presence_penalty, temperature
+
+        # 普通情况
+        temperature = 0.9
+
+        # 控制随机数的精度round(数值，精度)
+        presence_penalty = 0 + round(random.uniform(-1, 1) / 10, 2)
+        frequency_penalty = 0 + round(random.uniform(-1, 1) / 10, 2)
+        _sentiment_score = Utils.sentiment(sentence=prompt).get("score")
+        while _sentiment_score > 1.5 or _sentiment_score < -1.5:
+            _sentiment_score = _sentiment_score / 10
+        _sentiment_score = 0.1 if 0.05 < _sentiment_score < 0.1 else _sentiment_score
+        _sentiment_score = -0.1 if -0.1 < _sentiment_score < -0.05 else _sentiment_score
+
+        # NEW
+        presence_penalty -= _sentiment_score * 1.2
+        # REPEAT
+        frequency_penalty -= _sentiment_score * 0.8
+
+        # CHECK
+        temperature = temperature if 0 < temperature <= 1 else 0.9
+
+        presence_penalty = presence_penalty if -2.0 < presence_penalty else -1.5
+        presence_penalty = presence_penalty if presence_penalty < 2.0 else 1.5
+
+        frequency_penalty = frequency_penalty if -2.0 < frequency_penalty else -1.5
+        frequency_penalty = frequency_penalty if frequency_penalty < 2.0 else 1.5
+
+        temperature = round(temperature, 1)
+        presence_penalty = round(presence_penalty, 1)
+        frequency_penalty = round(frequency_penalty, 1)
+        return frequency_penalty, presence_penalty, temperature
+
+
+class Utils(object):
 
     @staticmethod
     def keyPhraseExtraction(sentence: str):
@@ -99,6 +207,8 @@ class Talk(object):
         # 统计中文字符数量
         return len(gpt_tokenizer.encode(s))
 
+
+class Cut(object):
     @staticmethod
     def english_sentence_cut(text) -> list:
         list_ = list()
@@ -144,58 +254,11 @@ class Talk(object):
             index = end
         return listr
 
-    @staticmethod
-    def isCode(sentence):
-        code = False
-        _reco = [
-            '("',
-            '")',
-            ").",
-            "()",
-            "!=",
-            "=="
-        ]
-        _t = len(_reco)
-        _r = 0
-        for i in _reco:
-            if i in sentence:
-                _r += 1
-        if _r > _t / 2:
-            code = True
-        rms = [
-            "print_r(",
-            "var_dump(",
-            'NSLog( @',
-            'println(',
-            '.log(',
-            'print(',
-            'printf(',
-            'WriteLine(',
-            '.Println(',
-            '.Write(',
-            'alert(',
-            'echo(',
-        ]
-        for i in rms:
-            if i in sentence:
-                code = True
-        return code
-
-    @staticmethod
-    def get_language(sentence: str):
-        language = "english"
-        # 差缺中文系统
-        if len([c for c in sentence if ord(c) > 127]) / len(sentence) > 0.5:
-            language = "chinese"
-        if Talk.isCode(sentence):
-            language = "code"
-        return language
-
     def cut_sentence(self, sentence: str) -> list:
-        language = self.get_language(sentence)
-        if language == "chinese":
+        language = Detect.get_text_language(sentence)
+        if language == "CN":
             _reply_list = self.cut_chinese_sentence(sentence)
-        elif language == "english":
+        elif language == "EN":
             # from nltk.tokenize import sent_tokenize
             _reply_list = self.english_sentence_cut(sentence)
         else:

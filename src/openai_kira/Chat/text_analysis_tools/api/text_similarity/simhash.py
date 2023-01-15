@@ -8,7 +8,7 @@ import jieba.analyse
 def cut_words_weights(content):
     """
     根据jieba分词，提取关键词及其权重
-    :param data:
+    :param content:
     :return:
     """
     # jieba提取关键词及其权重
@@ -61,7 +61,7 @@ def cal_hamming_distance(hash_file1, hash_file2):
     return hamming_dis
 
 
-class SimHashSimilarity():
+class SimHashSimilarity(object):
     def __init__(self):
         pass
 

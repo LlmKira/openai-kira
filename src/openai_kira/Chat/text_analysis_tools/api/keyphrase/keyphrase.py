@@ -11,7 +11,7 @@ import numpy as np
 # from wordcloud import WordCloud
 
 
-class KeyPhraseExtraction():
+class KeyPhraseExtraction(object):
     def __init__(self, topk=50, method='tfidf', with_word=True):
         """
         :param topk: 根据前多少关键词生成短语

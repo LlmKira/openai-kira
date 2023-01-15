@@ -8,7 +8,7 @@
 """
 
 import numpy
-from ..utils.Talk import Talk
+from ..utils.chat import Utils, Detect
 from ..utils.data import MsgFlow
 
 
@@ -79,7 +79,7 @@ class MatrixPoint(object):
         prompt = self.prompt
         start_token = self.start_token
         if self.memory is None:
-            memory = []
+            return []
         _create_token = self.token_limit - self.extra_token
         # 入口检查
         if len(memory) - attention < 0:
@@ -106,7 +106,7 @@ class MatrixPoint(object):
         # 相似度检索
         for i in range(0, len(memory)):
             ask, reply = MsgFlow.get_content(memory[i], sign=False)
-            _diff1 = Talk.cosion_sismilarity(pre=prompt, aft=f"{ask}{reply}")
+            _diff1 = Utils.cosion_sismilarity(pre=prompt, aft=f"{ask}{reply}")
             _diff = _diff1
             score = _diff * 100
             score = score if score < 95 else 1
@@ -114,7 +114,7 @@ class MatrixPoint(object):
                 memory[i]["content"]["weight"].append(score)
 
         # 主题检索
-        _key = Talk.tfidf_keywords(prompt, topK=5)
+        _key = Utils.tfidf_keywords(prompt, topK=5)
         # print(_key)
         for i in range(0, len(memory)):
             score = 0
@@ -130,9 +130,9 @@ class MatrixPoint(object):
         # 预处理
         for i in range(0, len(memory) - attention):
             ask, reply = MsgFlow.get_content(memory[i], sign=False)
-            if Talk.tokenizer(f"{ask}{reply}") > 240:
-                if Talk.get_language(f"{ask}{reply}") == "chinese":
-                    _sum = Talk.tfidf_summarization(sentence=f"{ask}{reply}", ratio=0.5)
+            if Utils.tokenizer(f"{ask}{reply}") > 240:
+                if Detect.get_text_language(sentence=f"{ask}{reply}") == "CN":
+                    _sum = Utils.tfidf_summarization(sentence=f"{ask}{reply}", ratio=0.5)
                     if len(_sum) > 7:
                         memory[i]["content"]["ask"] = "info"
                         memory[i]["content"]["reply"] = _sum
@@ -149,7 +149,7 @@ class MatrixPoint(object):
             level = (score / full_score) * 100
             ask, reply = MsgFlow.get_content(memory[i], sign=True)
             if level > 30:
-                _now_token += Talk.tokenizer(f"{ask}{reply}")
+                _now_token += Utils.tokenizer(f"{ask}{reply}")
                 if _now_token > _create_token:
                     break
                 _msg_flow.append(memory[i])
@@ -232,8 +232,8 @@ class SinglePoint(object):
         # 相似度检索
         for i in range(0, len(memory)):
             ask, reply = MsgFlow.get_content(memory[i], sign=False)
-            _diff1 = Talk.cosion_sismilarity(pre=prompt, aft=ask)
-            _diff2 = Talk.cosion_sismilarity(pre=prompt, aft=reply)
+            _diff1 = Utils.cosion_sismilarity(pre=prompt, aft=ask)
+            _diff2 = Utils.cosion_sismilarity(pre=prompt, aft=reply)
             _diff = _diff1 if _diff1 > _diff2 else _diff2
             score = _diff * 100
             score = score if score < 95 else 1
@@ -241,7 +241,7 @@ class SinglePoint(object):
                 memory[i]["content"]["weight"].append(score)
 
         # 主题检索
-        _key = Talk.tfidf_keywords(prompt, topK=5)
+        _key = Utils.tfidf_keywords(prompt, topK=5)
         # print(_key)
         for i in range(0, len(memory)):
             score = 0
@@ -257,9 +257,9 @@ class SinglePoint(object):
         # 预处理
         for i in range(0, len(memory) - attention):
             ask, reply = MsgFlow.get_content(memory[i], sign=False)
-            if Talk.tokenizer(f"{ask}{reply}") > 240:
-                if Talk.get_language(f"{ask}{reply}") == "chinese":
-                    _sum = Talk.tfidf_summarization(sentence=f"{ask}{reply}", ratio=0.5)
+            if Utils.tokenizer(f"{ask}{reply}") > 240:
+                if Detect.get_text_language(sentence=f"{ask}{reply}") == "CN":
+                    _sum = Utils.tfidf_summarization(sentence=f"{ask}{reply}", ratio=0.5)
                     if len(_sum) > 7:
                         memory[i]["content"]["ask"] = "info"
                         memory[i]["content"]["reply"] = _sum
@@ -275,7 +275,7 @@ class SinglePoint(object):
             level = (score / full_score) * 100
             ask, reply = MsgFlow.get_content(memory[i], sign=True)
             if level > 50:
-                _now_token += Talk.tokenizer(f"{ask}{reply}")
+                _now_token += Utils.tokenizer(f"{ask}{reply}")
                 if _now_token > _create_token:
                     # print(f"{ask}-> {_now_token}")
                     break
