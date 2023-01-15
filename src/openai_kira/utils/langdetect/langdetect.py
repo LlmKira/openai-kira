@@ -15,7 +15,7 @@ class LangDetector(object):
         'ko': re.compile(u'[\uac00-\ud7af\u1100-\u11ff\u3130-\u318f]')
     }
     # 默认使用的语言，识别不了的字符串会默认当作默认语言的字符
-    default_lang = 'zh'
+    default_lang = 'en'
 
     # def __init__(self, text):
     # self.text = text

@@ -3,6 +3,7 @@
 # @FileName: __init__.py
 # @Software: PyCharm
 # @Github    ：sudoskys
+import json
 import random
 from typing import Union
 
@@ -63,18 +64,18 @@ class Completion(object):
             "temperature": temperature,
             "max_tokens": max_tokens
         }
-        api_config = {
+        _api_config = {
             param: api["params"][param]["Defaults"]
             for param in api["params"].keys()
             if (param in kwargs) or (param in params)
         }
-        api_config.update(params)
-        api_config.update(kwargs)
+        _api_config.update(params)
+        _api_config.update(kwargs)
         # 返回请求
         return await request(
             "POST",
             api["url"],
-            data=api_config,
+            data=_api_config,
             auth=self.__api_key,
             proxy=self.__proxy,
             json_body=True,

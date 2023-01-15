@@ -62,6 +62,7 @@ async def request(
     if json_body:
         config["headers"]["Content-Type"] = "application/json"
         config["data"] = json.dumps(config["data"])
+
     # SSL
     # config["ssl"] = False
 

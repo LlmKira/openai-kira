@@ -3,8 +3,8 @@
 # @FileName: Utils.py
 # @Software: PyCharm
 # @Github    ：sudoskys
-import random
 import re
+import random
 
 from .langdetect.langdetect import LangDetector
 from ..Chat.text_analysis_tools.api.keywords.tfidf import TfidfKeywords
@@ -75,10 +75,14 @@ class Detect(object):
         return code
 
     @staticmethod
-    def get_text_language(sentence: str, raw_list: bool = False):
-        if raw_list:
-            return LangDetector().detect(sentence)
-        return LangDetector().detect(sentence)[0][0].upper()
+    def get_text_language(sentence: str):
+        try:
+            from .fatlangdetect import detect
+            lang_type = detect(text=sentence.replace("\n", "").replace("\r", ""), low_memory=True).get("lang").upper()
+        except Exception as e:
+            from .langdetect import detect
+            lang_type = detect(text=sentence.replace("\n", "").replace("\r", ""))[0][0].upper()
+        return lang_type
 
     def get_tendency_arg(self, prompt: str, memory: list = None, lang: str = "CN") -> tuple:
         if memory is None:

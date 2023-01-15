@@ -210,7 +210,7 @@ class Chatbot(object):
 
         # OPTIMIZER
         if optimizer is None:
-            optimizer = Optimizer.MatrixPoint
+            optimizer = Optimizer.SinglePoint
 
         # LANG
         prompt_lang = Detect.get_text_language(sentence=prompt)
@@ -276,7 +276,6 @@ class Chatbot(object):
         while Utils.tokenizer(_prompt) > _mk:
             _prompt = _prompt[1:]
         _prompt = _header + _prompt
-
         # THINK ABOUT HOT CAKE
         _frequency_penalty, _presence_penalty, _temperature = Detect().get_tendency_arg(prompt=prompt)
 
@@ -289,7 +288,7 @@ class Chatbot(object):
         }
         _arg_config = {key: item for key, item in kwargs.items() if key in _request_arg.keys()}
         _request_arg.update(_arg_config)
-        _request_arg = json.loads(json.dumps(_request_arg))
+
         # REQ
         response = await Completion(api_key=self.__api_key, call_func=self.__call_func).create(
             model=model,
@@ -318,7 +317,7 @@ class Chatbot(object):
             processed = await processor.process(param=PluginParam(text=prompt, server=table), plugins=[plugin])
             _return.extend(processed)
         reply = "\n".join(_return) if _return else ""
-        reply = reply[:700]
+        reply = reply[:500]
         logger.debug(f"AllPluginReturn:{reply}")
         return reply
 

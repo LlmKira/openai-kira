@@ -48,9 +48,8 @@ async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
                                                 prompt="you are ill man",
                                                 max_tokens=500,
-                                                role="你扮演",
                                                 web_enhance_server={"time": ""},
-                                                optimizer=openai_kira.Chat.Optimizer.MatrixPoint,
+                                                optimizer=openai_kira.Chat.Optimizer.SinglePoint,
                                                 )
     print(response)
 

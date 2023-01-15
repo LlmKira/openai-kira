@@ -236,7 +236,7 @@ class SinglePoint(object):
             _diff2 = Utils.cosion_sismilarity(pre=prompt, aft=reply)
             _diff = _diff1 if _diff1 > _diff2 else _diff2
             score = _diff * 100
-            score = score if score < 95 else 1
+            score = score if score < 90 else 1
             if score != 0:
                 memory[i]["content"]["weight"].append(score)
 
@@ -251,7 +251,8 @@ class SinglePoint(object):
                 if ir in f"{ask}{reply}":
                     score += 1
             _get = (score / full_score) * 100
-            if _get:
+            _get = _get if _get < 95 else 50
+            if _get != 0:
                 memory[i]["content"]["weight"].append(_get)  # 基准数据，置信为 0.5 百分比
 
         # 预处理
