@@ -281,16 +281,15 @@ class Chatbot(object):
         _frequency_penalty, _presence_penalty, _temperature = Detect().get_tendency_arg(prompt=prompt)
 
         # SOME HOT CAKE
-        api_config = {
+        _request_arg = {
             "frequency_penalty": _frequency_penalty,
             "presence_penalty": _presence_penalty,
             "temperature": _temperature,
             "logit_bias": {}
         }
-        api_config = json.dumps(api_config)
-        api_config = json.loads(api_config)
-        config = {key: item for key, item in kwargs.items() if key in api_config.keys()}
-        api_config.update(config)
+        _arg_config = {key: item for key, item in kwargs.items() if key in _request_arg.keys()}
+        _request_arg.update(_arg_config)
+        _request_arg = json.loads(json.dumps(_request_arg))
         # REQ
         response = await Completion(api_key=self.__api_key, call_func=self.__call_func).create(
             model=model,
@@ -303,7 +302,7 @@ class Chatbot(object):
                   f"{self._restart_sequence}:",
                   f"{self._start_sequence}：",
                   f"{self._restart_sequence}："],
-            **api_config
+            **_request_arg
         )
         self.record_dialogue(prompt=prompt, response=response)
         return response

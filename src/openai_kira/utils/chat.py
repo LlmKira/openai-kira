@@ -120,18 +120,19 @@ class Detect(object):
             if _memory_len / 20 > 0.7:
                 frequency_penalty = abs(frequency_penalty)
 
-        # CHECK
-        temperature = temperature if 0 < temperature <= 1 else 0.9
-
-        presence_penalty = presence_penalty if -2.0 < presence_penalty else -1.5
-        presence_penalty = presence_penalty if presence_penalty < 2.0 else 1.5
-
-        frequency_penalty = frequency_penalty if -2.0 < frequency_penalty else -1.5
-        frequency_penalty = frequency_penalty if frequency_penalty < 2.0 else 1.5
-
+        # FIX
         temperature = round(temperature, 1)
         presence_penalty = round(presence_penalty, 1)
         frequency_penalty = round(frequency_penalty, 1)
+
+        # CHECK
+        temperature = temperature if 0 < temperature < 1 else 0.9
+
+        presence_penalty = presence_penalty if -2.0 < presence_penalty else -1
+        presence_penalty = presence_penalty if presence_penalty < 2.0 else 1
+
+        frequency_penalty = frequency_penalty if -2.0 < frequency_penalty else -1
+        frequency_penalty = frequency_penalty if frequency_penalty < 2.0 else 1
         return frequency_penalty, presence_penalty, temperature
 
 
