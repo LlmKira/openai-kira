@@ -46,7 +46,7 @@ receiver = openai_kira.Chat.Chatbot(
 
 async def chat():
     response = await receiver.get_chat_response(model="text-davinci-003",
-                                                prompt="you are ill man",
+                                                prompt="2022年天气是什么 ?",
                                                 max_tokens=500,
                                                 web_enhance_server={"time": ""},
                                                 optimizer=openai_kira.Chat.Optimizer.SinglePoint,

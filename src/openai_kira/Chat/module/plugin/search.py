@@ -28,7 +28,7 @@ class Search(object):
                                "what", "who", "how", "Who",
                                "Why", "的作品", "why", "Where",
                                "了解", "简述一下", "How to", "how to",
-                               "解释", "怎样的", "新闻", "电影",
+                               "解释", "怎样的", "新闻", "ニュース", "电影", "番剧", "アニメ",
                                "2022", "2023", "请教", "介绍", "怎样",
                                ] + PromptTool.help_words_list()
 
