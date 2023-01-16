@@ -197,9 +197,9 @@ class Chatbot(object):
                                 ) -> dict:
         """
         异步的，得到对话上下文
-        :param web_enhance_server: {"type":["https://www.exp.com/search?q={}"]} 格式如此
-        :param role:
-        :param head: 预设技巧
+        :param web_enhance_server: 插件
+        :param role: 预设
+        :param head: 对话预设的 head
         :param max_tokens: 限制返回字符数量
         :param model: 模型选择
         :param prompt: 提示词
