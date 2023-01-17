@@ -296,11 +296,10 @@ class Chatbot(object):
         # KWARGS
         _arg_config = {key: item for key, item in kwargs.items() if key in _request_arg.keys()}
         _request_arg.update(_arg_config)
-
         # REQ
         response = await Completion(api_key=self.__api_key, call_func=self.__call_func).create(
             model=model,
-            prompt=_prompt,
+            prompt=str(_prompt),
             max_tokens=max_tokens,
             top_p=1,
             n=1,

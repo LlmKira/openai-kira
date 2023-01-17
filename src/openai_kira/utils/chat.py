@@ -135,11 +135,11 @@ class Detect(object):
         # CHECK
         temperature = temperature if 0 < temperature < 1 else 0.9
 
-        presence_penalty = presence_penalty if -2.0 < presence_penalty else -0.1
-        presence_penalty = presence_penalty if presence_penalty < 2.0 else 0.1
+        presence_penalty = presence_penalty if -1.8 < presence_penalty else -0.1
+        presence_penalty = presence_penalty if presence_penalty < 1.8 else 0.1
 
-        frequency_penalty = frequency_penalty if -2.0 < frequency_penalty else -0.1
-        frequency_penalty = frequency_penalty if frequency_penalty < 2.0 else 0.1
+        frequency_penalty = frequency_penalty if -1.8 < frequency_penalty else -0.1
+        frequency_penalty = frequency_penalty if frequency_penalty < 1.8 else 0.1
         return frequency_penalty, presence_penalty, temperature
 
 
