@@ -1,5 +1,7 @@
 # openai-kira
 
+**New Era: https://github.com/sudoskys/llm-kira/ this repo No longer maintained**
+
 Openai GPT3 ChatBot 框架包，在未公开前快速实现类 ChatGPT接入（公开后就接入chatGPT），打包成依赖的玩具。提供 redis 和 文件数据库
 两个选择。
 
